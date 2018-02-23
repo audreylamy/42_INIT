@@ -1,0 +1,1 @@
+dig http://slash16.org/ | grep SERVER | cut -s -d':' -f2 | cut -c2-11

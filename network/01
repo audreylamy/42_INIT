@@ -1,0 +1,1 @@
+ifconfig | grep mtu | cut -s -d':' -f1

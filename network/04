@@ -1,0 +1,1 @@
+netstat -rn | grep Routing -A 4 | grep default | cut -c20-32

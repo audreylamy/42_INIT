@@ -1,0 +1,20 @@
+#!/bin/bash
+crontab -e
+0 0 * * * path/to/script.sh
+
+CHECKSUM ="/tmp/checksum"
+NOM_FICHIER="/etc/crontab"
+MD5VALUE = $(md5sum $NOM_FICHIER | awk '{print $1}')
+DERNIERE_MODIF=$(date -r ${NOM_FICHIER} '+%d/%m/%Y %H:%M')
+MAIL_ADMIN="root"
+
+if [ ! -f $CHECKSUM ]; then
+	echo "$MD5VALUE" > $CHECKSUM
+	exit 0;
+fi;
+
+if [ "$MD5VALUE" != "$(cat $CHECKSUM)" ]; then
+	echo "$MD5VALUE" > $CHECKSUM
+	CORPS_MESSAGE="Alerte, le fichier ${NOM_FICHIER} a été modifié le ${DERNIERE_MODIF}";
+	echo "$CORPS_MESSAGE" | mail -s "Alerte surveillance modification de fichier" "${MAIL_ADMIN}";
+fi
